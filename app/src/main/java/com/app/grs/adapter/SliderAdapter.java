@@ -50,7 +50,7 @@ public class SliderAdapter extends PagerAdapter {
 
         HashMap<String,String> itemmap = bannerList.get(position);
 
-        Glide.with(context).load(itemmap.get("image_url") + itemmap.get("image_name")).into(imageView);
+        Glide.with(context).load(itemmap.get("image_url") + itemmap.get("image_name")).thumbnail(0.1f).into(imageView);
 
         container.addView(view);
 

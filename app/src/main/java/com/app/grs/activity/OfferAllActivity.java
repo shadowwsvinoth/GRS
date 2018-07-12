@@ -21,6 +21,7 @@ import com.app.grs.R;
 import com.app.grs.adapter.AllFeaturedAdapter;
 import com.app.grs.adapter.AllOfferAdapter;
 import com.app.grs.helper.Constants;
+import com.app.grs.helper.GRS;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -104,6 +105,20 @@ public class OfferAllActivity extends AppCompatActivity {
                 }
             }
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // For Internet checking
+        GRS.registerReceiver(OfferAllActivity.this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // For Internet disconnect checking
+        GRS.unregisterReceiver(OfferAllActivity.this);
     }
 
     private class fetchAllOffer extends AsyncTask<String, Integer, String>{

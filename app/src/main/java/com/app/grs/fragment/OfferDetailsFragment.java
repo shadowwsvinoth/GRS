@@ -42,6 +42,7 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 import okhttp3.Call;
@@ -70,7 +71,9 @@ public class OfferDetailsFragment extends Fragment {
     int numItemCount;
     AlertDialog alertDialog;
     String wish_flag, cart_flag;
-    private static final SimpleDateFormat sdf = new SimpleDateFormat("dd-M-yyyy hh:mm:ss");
+    SimpleDateFormat sdf;
+    Date now;
+
 
     public OfferDetailsFragment() {
         // Required empty public constructor
@@ -120,8 +123,10 @@ public class OfferDetailsFragment extends Fragment {
 
         if (prorate.equalsIgnoreCase("0")){
             btnoffrate.setEnabled(true);
+            btnoffrate.setText("RATE NOW");
         }else {
             btnoffrate.setEnabled(false);
+            btnoffrate.setText("RATED");
         }
         /*if (cart_flag.equalsIgnoreCase("1")) {
             btnoffcart.setText("REMOVE FROM CART");
@@ -279,8 +284,9 @@ public class OfferDetailsFragment extends Fragment {
 
     private void rateDialog() {
 
-        final Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-        sdf.format(timestamp);
+        now = new Date();
+        sdf = new SimpleDateFormat("MM-dd-yyyy hh:mm:ss");
+        final String timestamp = sdf.format(now);
 
         final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = this.getLayoutInflater();
@@ -295,6 +301,7 @@ public class OfferDetailsFragment extends Fragment {
         final CustomEditText etreview = dialogView.findViewById(R.id.rate_et_review);
 
         alertDialog = dialogBuilder.create();
+        alertDialog.setCancelable(false);
 
         if (ratingBar != null){
 
@@ -327,9 +334,9 @@ public class OfferDetailsFragment extends Fragment {
         String url = Constants.BASE_URL + Constants.RATING;
         String proid, cusid, rate, review;
         ProgressDialog progress;
-        Timestamp timestamp;
+        String timestamp;
 
-        public postRating(Context context, String proid, String cusid, String rate, String review, Timestamp timestamp) {
+        public postRating(Context context, String proid, String cusid, String rate, String review, String timestamp) {
             this.context = context;
             this.proid = proid;
             this.cusid = cusid;
@@ -360,7 +367,7 @@ public class OfferDetailsFragment extends Fragment {
                     .add("product_id", proid)
                     .add("rate", rate)
                     .add("review", review)
-                    .add("timestamp", String.valueOf(timestamp))
+                    .add("timestamp",timestamp)
                     .build();
             Request request = new Request.Builder()
                     .url(url)

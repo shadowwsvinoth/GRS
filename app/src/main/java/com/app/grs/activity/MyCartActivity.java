@@ -16,6 +16,7 @@ import com.app.grs.R;
 import com.app.grs.adapter.CartAdapter;
 import com.app.grs.adapter.WishlistAdapter;
 import com.app.grs.helper.Constants;
+import com.app.grs.helper.GRS;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -62,6 +63,20 @@ public class MyCartActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // For Internet checking
+        GRS.registerReceiver(MyCartActivity.this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // For Internet disconnect checking
+        GRS.unregisterReceiver(MyCartActivity.this);
     }
 
     private class fetchCart extends AsyncTask<String, Integer, String>{

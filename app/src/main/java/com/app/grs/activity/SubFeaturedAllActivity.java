@@ -26,6 +26,7 @@ import com.app.grs.R;
 import com.app.grs.adapter.ReviewAdapter;
 import com.app.grs.fragment.FeaturedDetailsFragment;
 import com.app.grs.helper.Constants;
+import com.app.grs.helper.GRS;
 import com.bumptech.glide.Glide;
 import com.libizo.CustomEditText;
 
@@ -104,8 +105,10 @@ public class SubFeaturedAllActivity extends AppCompatActivity {
         prorate = intent.getStringExtra("prorate");
         if (prorate.equalsIgnoreCase("0")){
             btnfearate.setEnabled(true);
+            btnfearate.setText("RATE NOW");
         }else {
             btnfearate.setEnabled(false);
+            btnfearate.setText("RATED");
         }
 
         new fetchReview(this, proid).execute();
@@ -162,6 +165,20 @@ public class SubFeaturedAllActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // For Internet checking
+        GRS.registerReceiver(SubFeaturedAllActivity.this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // For Internet disconnect checking
+        GRS.unregisterReceiver(SubFeaturedAllActivity.this);
     }
 
     private class storeWishlist extends AsyncTask<String, Integer, String> {
@@ -375,6 +392,7 @@ public class SubFeaturedAllActivity extends AppCompatActivity {
         final CustomEditText etreview = dialogView.findViewById(R.id.rate_et_review);
 
         alertDialog = dialogBuilder.create();
+        alertDialog.setCancelable(false);
 
         if (ratingBar != null){
 

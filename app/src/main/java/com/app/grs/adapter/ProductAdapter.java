@@ -82,7 +82,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
         holder.productPrice.setText("₹.\t" + itemmap.get("product_price"));
         holder.ratingBar.setRating(rate);
 
-        Glide.with(mContext).load(itemmap.get("product_image")).into(holder.productImage);
+        Glide.with(mContext).load(itemmap.get("product_image")).thumbnail(0.1f).into(holder.productImage);
 
         Constants.pref = mContext.getSharedPreferences("GRS", MODE_PRIVATE);
         Constants.productid = itemmap.get("product_id");

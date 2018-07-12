@@ -8,11 +8,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.MatrixCursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.BaseColumns;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
@@ -32,18 +29,17 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
-import android.widget.CursorAdapter;
 import android.widget.FrameLayout;
-import android.widget.SimpleCursorAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.app.grs.adapter.SearchAdapter;
 import com.app.grs.fragment.CategoryFragment;
 import com.app.grs.fragment.HomeFragment;
 import com.app.grs.helper.Constants;
 import com.app.grs.helper.GRS;
 import com.app.grs.helper.GetSet;
+import com.bumptech.glide.Glide;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -51,6 +47,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.Call;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
@@ -62,7 +59,7 @@ import okhttp3.Response;
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
 
-    TextView textItemCount;
+    TextView textItemCount, name;
     int numItemCount;
     private AlertDialog alertDialog;
     private BroadcastReceiver broadcastReceiver;
@@ -72,6 +69,11 @@ public class HomeActivity extends AppCompatActivity
     private ArrayList<HashMap<String, String>> searchList;
     RecyclerView.LayoutManager mLayoutManager;
     FrameLayout frameLayout;
+    ImageView imageView;
+    String cusid = "";
+    String url="", userpicpath = "", username = "";
+    CircleImageView circleImageView;
+    private static boolean isSearchView = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,9 +87,9 @@ public class HomeActivity extends AppCompatActivity
         Constants.pref = getSharedPreferences("GRS", Context.MODE_PRIVATE);
         Constants.editor = Constants.pref.edit();
 
-        String cusid = Constants.pref.getString("mobileno", "");
-        new fetchCartCount(this, cusid).execute();
-
+        cusid = Constants.pref.getString("mobileno", "");
+        new fetchCartCount(HomeActivity.this, cusid).execute();
+        new fetchProfileImage(HomeActivity.this).execute();
         numItemCount = Constants.pref.getInt("count", 0);
 
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
@@ -95,6 +97,7 @@ public class HomeActivity extends AppCompatActivity
         fragmentTransaction.addToBackStack(null).commit();
         frameLayout = findViewById(R.id.content_frame);
         recyclerView = findViewById(R.id.rv_search);
+        imageView = findViewById(R.id.noitem);
         searchList = new ArrayList<HashMap<String, String>>();
         mLayoutManager = new GridLayoutManager(this, 2);
         recyclerView.setLayoutManager(mLayoutManager);
@@ -109,18 +112,20 @@ public class HomeActivity extends AppCompatActivity
 
         frameLayout.setVisibility(View.VISIBLE);
         recyclerView.setVisibility(View.GONE);
-
+        imageView.setVisibility(View.GONE);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
+        new fetchProfile(HomeActivity.this, cusid).execute();
+
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        View headerLayout = navigationView.getHeaderView(0);
+        circleImageView = headerLayout.findViewById(R.id.nav_iv);
+        name= headerLayout.findViewById(R.id.nav_tv_name);
         navigationView.setNavigationItemSelectedListener(this);
-
-       /* Log.d("Backstackcount", String.valueOf(getFragmentManager().getBackStackEntryCount()));*/
-
 
     }
 
@@ -129,7 +134,12 @@ public class HomeActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else if (getSupportFragmentManager().getBackStackEntryCount() == 1) {
+        } else if (isSearchView){
+            isSearchView = false;
+            frameLayout.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
+            imageView.setVisibility(View.GONE);
+        }else if (getSupportFragmentManager().getBackStackEntryCount() == 1) {
 
             android.support.v7.app.AlertDialog.Builder alertDialog = new android.support.v7.app.AlertDialog.Builder(HomeActivity.this);
             alertDialog.setTitle("Exit GRS");
@@ -186,9 +196,11 @@ public class HomeActivity extends AppCompatActivity
         super.onNewIntent(intent);
 
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            isSearchView = true;
             String query = intent.getStringExtra(SearchManager.QUERY);
             if (searchView != null) {
                 searchView.clearFocus();
+                searchList.clear();
             }
             new getSearch(HomeActivity.this, query).execute();
         }
@@ -265,6 +277,13 @@ public class HomeActivity extends AppCompatActivity
         }else if (id == R.id.action_account){
 
             startActivity(new Intent(this, MyAccountActivity.class));
+            frameLayout.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
+            searchList.clear();
+
+        }else if (id == R.id.action_contact){
+
+            startActivity(new Intent(this, ContactActivity.class));
             frameLayout.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.GONE);
             searchList.clear();
@@ -417,7 +436,7 @@ public class HomeActivity extends AppCompatActivity
         String url = Constants.BASE_URL + Constants.GET_SEARCH;
         ProgressDialog progress;
         HashMap<String,String> map = new HashMap<>();
-        String searchQuery, name, rate, image;
+        String searchQuery, id, name, rate, image;
 
         public getSearch(Context context, String searchQuery) {
             this.context = context;
@@ -480,6 +499,7 @@ public class HomeActivity extends AppCompatActivity
                     for(int i=0;i<array.length();i++) {
                         JSONObject jcat = array.getJSONObject(i);
 
+                        id = jcat.getString("product_id");
                         name = jcat.getString("product_name");
                         rate = jcat.getString("product_rating");
                         image = jcat.getString("product_image");
@@ -487,6 +507,7 @@ public class HomeActivity extends AppCompatActivity
                         map.put("product_name", name);
                         map.put("product_rating", rate);
                         map.put("product_image", image);
+                        map.put("product_id", id);
 
                         searchList.add(map);
                     }
@@ -496,10 +517,192 @@ public class HomeActivity extends AppCompatActivity
 
                     frameLayout.setVisibility(View.GONE);
                     recyclerView.setVisibility(View.VISIBLE);
+                    imageView.setVisibility(View.GONE);
 
-                }else {
-
+                }else if (jonj.getString("status").equalsIgnoreCase(
+                        "empty")){
+                    frameLayout.setVisibility(View.GONE);
+                    recyclerView.setVisibility(View.GONE);
+                    imageView.setVisibility(View.VISIBLE);
+/*
                     Toast.makeText(context, jonj.getString("message"), Toast.LENGTH_SHORT).show();
+*/
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
+
+    private class fetchProfileImage extends AsyncTask<String,Integer,String>{
+
+        private Context context;
+        private String url = Constants.BASE_URL + Constants.GET_PROFILE;
+        ProgressDialog progress;
+        String picname, picpath;
+
+        public fetchProfileImage(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            progress = new ProgressDialog(context);
+            progress.setMessage("Please wait ....");
+            progress.setTitle("Loading");
+            progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progress.show();
+
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+
+            String jsonData = null;
+            Response response = null;
+            OkHttpClient client = new OkHttpClient();
+            RequestBody body = new FormBody.Builder()
+                    .add(Constants.mobileno, cusid)
+                    .build();
+
+            Request request = new Request.Builder()
+                    .url(url)
+                    .post(body)
+                    .build();
+            Call call = client.newCall(request);
+
+            try {
+                response = call.execute();
+
+                if (response.isSuccessful()) {
+                    jsonData = response.body().string();
+                } else {
+                    jsonData = null;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return jsonData;
+        }
+
+        @Override
+        protected void onPostExecute(String jsonData) {
+            super.onPostExecute(jsonData);
+            progress.dismiss();
+            Log.v("result", "" + jsonData);
+            JSONObject jonj = null;
+            try {
+                jonj = new JSONObject(jsonData);
+                if (jonj.getString("status").equalsIgnoreCase(
+                        "success")) {
+                    String data = jonj.getString("message");
+                    JSONArray array = new JSONArray(data);
+                    JSONObject object = array.getJSONObject(0);
+
+                    GetSet.setIsLogged(true);
+                    GetSet.setUserpic(object.getString("userpic"));
+                    GetSet.setUserpicurl(object.getString("userpicurl"));
+
+                    Constants.editor.putString("userpic", GetSet.getUserpic());
+                    Constants.editor.putString("userpicurl", GetSet.getUserpicurl());
+                    Constants.editor.commit();
+
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
+
+    private class fetchProfile extends AsyncTask<String, Integer, String>{
+
+        private Context context;
+        private String url = Constants.BASE_URL + Constants.GET_PROFILE;
+        ProgressDialog progress;
+        String cusid;
+
+        public fetchProfile(Context context, String cusid) {
+            this.context = context;
+            this.cusid = cusid;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            progress = new ProgressDialog(context);
+            progress.setMessage("Please wait ....");
+            progress.setTitle("Loading");
+            progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progress.show();
+
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+
+            String jsonData = null;
+            Response response = null;
+            OkHttpClient client = new OkHttpClient();
+            RequestBody body = new FormBody.Builder()
+                    .add(Constants.mobileno, cusid)
+                    .build();
+
+            Request request = new Request.Builder()
+                    .url(url)
+                    .post(body)
+                    .build();
+            Call call = client.newCall(request);
+
+            try {
+                response = call.execute();
+
+                if (response.isSuccessful()) {
+                    jsonData = response.body().string();
+                } else {
+                    jsonData = null;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return jsonData;
+
+        }
+
+        @Override
+        protected void onPostExecute(String jsonData) {
+            super.onPostExecute(jsonData);
+            progress.dismiss();
+            Log.v("result", "" + jsonData);
+            JSONObject jonj = null;
+            try {
+                jonj = new JSONObject(jsonData);
+                if (jonj.getString("status").equalsIgnoreCase(
+                        "success")) {
+                    String data = jonj.getString("message");
+                    JSONArray array = new JSONArray(data);
+                    JSONObject object = array.getJSONObject(0);
+
+                    username = object.getString("name");
+                    userpicpath = object.getString("userimageurl");
+
+                    if(userpicpath != null){
+                        url = userpicpath;
+                        Glide.with(HomeActivity.this)
+                                .load(url)
+
+                                .into(circleImageView);
+                    }else {
+                        Glide
+                                .with(HomeActivity.this)
+                                .load(R.drawable.grslogo)
+                                .into(circleImageView);
+                    }
+                    name.setText(username);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();

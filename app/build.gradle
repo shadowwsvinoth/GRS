@@ -46,7 +46,7 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
     implementation 'me.relex:circleindicator:1.2.2@aar'
     implementation 'com.uncopt:android.justified:1.0'
-    implementation 'com.mikhaellopez:circularimageview:3.0.2'
+    implementation 'de.hdodenhof:circleimageview:2.2.0'
     implementation 'ch.acra:acra:4.8.5'
 
 }

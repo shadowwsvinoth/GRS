@@ -1,14 +1,14 @@
 package com.app.grs.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-
 import com.app.grs.R;
 import com.app.grs.helper.Constants;
 import com.app.grs.helper.GRS;
-import com.app.grs.helper.GetSet;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -43,6 +43,21 @@ public class SplashActivity extends AppCompatActivity {
                     }
                 }
             }, 1500);
+        }else {
+
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+            alertDialog.setTitle("Network Error");
+            alertDialog.setMessage("Please check your Internet Connection!");
+            alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+
+                    finish();
+                    System.exit(0);
+                }
+            });
+
+            alertDialog.show();
         }
     }
 }

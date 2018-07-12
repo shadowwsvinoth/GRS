@@ -12,6 +12,7 @@
         android:layout_height="match_parent"
         android:id="@+id/content_frame"/>
     <android.support.v7.widget.RecyclerView
+        android:visibility="gone"
         android:id="@+id/rv_search"
         android:clipToPadding="false"
         android:background="#10000000"
@@ -20,4 +21,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="vertical" />
+    <ImageView
+        android:id="@+id/noitem"
+        android:visibility="gone"
+        android:scaleType="fitXY"
+        android:src="@drawable/noitem"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 </RelativeLayout>

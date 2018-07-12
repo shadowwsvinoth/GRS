@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 import com.app.grs.R;
 import com.app.grs.helper.Constants;
+import com.app.grs.helper.GRS;
 import com.app.grs.helper.GetSet;
 import com.bumptech.glide.Glide;
 import com.libizo.CustomEditText;
@@ -81,12 +82,35 @@ public class MyAccountActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                if (!etmobile.getText().toString().trim().equalsIgnoreCase(""))
+                boolean emptyfeilds = false;
+
+                if (etmobile.getText().toString().trim().length() == 0) {
+                    emptyfeilds = true;
+                    etmobile.setError("Details required");
+                }if (etname.getText().toString().trim().length() == 0){
+                    emptyfeilds = true;
+                    etname.setError("Details required");
+                }if (etemail.getText().toString().trim().length() == 0){
+                    emptyfeilds = true;
+                    etemail.setError("Details required");
+                }if (etcity.getText().toString().trim().length() == 0){
+                    emptyfeilds = true;
+                    etcity.setError("Details required");
+                }if (etstate.getText().toString().trim().length() == 0){
+                    emptyfeilds = true;
+                    etstate.setError("Details required");
+                }if (etpincode.getText().toString().trim().length() == 0){
+                    emptyfeilds = true;
+                    etpincode.setError("Details required");
+                }if (etaddress1.getText().toString().trim().length() == 0){
+                    emptyfeilds = true;
+                    etaddress1.setError("Details required");
+                }if (emptyfeilds == false){
 
                     new feedProfile(MyAccountActivity.this, mobileno).execute();
 
-                else
-                    Toast.makeText(MyAccountActivity.this, "Please enter mobile no", Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
         ivprofileedit.setOnClickListener(new View.OnClickListener() {
@@ -97,6 +121,20 @@ public class MyAccountActivity extends AppCompatActivity {
                 startActivityForResult(in, 2);
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // For Internet checking
+        GRS.registerReceiver(MyAccountActivity.this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // For Internet disconnect checking
+        GRS.unregisterReceiver(MyAccountActivity.this);
     }
 
     private class feedProfile extends AsyncTask<String, Integer, String> {
@@ -508,7 +546,6 @@ public class MyAccountActivity extends AppCompatActivity {
                     GetSet.setAddress2(object.getString("address2"));
                     GetSet.setUserpic(object.getString("userimage"));
                     GetSet.setUserpicurl(object.getString("userimageurl"));
-
 
                     Constants.editor.putString("cus_id", GetSet.getUserId());
                     Constants.editor.putString("name", GetSet.getName());

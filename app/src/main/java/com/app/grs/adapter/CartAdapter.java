@@ -62,14 +62,14 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolder> 
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final CartAdapter.MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final CartAdapter.MyViewHolder holder, final int position) {
 
         final HashMap<String,String> itemmap = cartList.get(position);
 
         holder.productName.setText(itemmap.get("product_name"));
         holder.productPrice.setText( "₹.\t" +itemmap.get("product_price"));
 
-        Glide.with(mContext).load(itemmap.get("product_image")).into(holder.productImage);
+        Glide.with(mContext).load(itemmap.get("product_image")).thumbnail(0.1f).into(holder.productImage);
 
         holder.deleteLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,10 +80,11 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolder> 
                 String cusid = Constants.pref.getString("mobileno", "");
                 String proid = itemmap.get("product_id");
 
-                cartList.remove(itemmap);
+                cartList.remove(position);
+                notifyItemRemoved(position);
+                notifyDataSetChanged();
 
                 int flag = 0;
-                notifyDataSetChanged();
                new deleteCart(mContext, cusid, proid, flag).execute();
 
             }

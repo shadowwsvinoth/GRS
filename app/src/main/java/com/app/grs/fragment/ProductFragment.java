@@ -20,6 +20,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -57,7 +58,7 @@ public class ProductFragment extends Fragment {
     String subcatname = Constants.subcategoryname;
     TextView textItemCount;
     int numItemCount;
-   /* String totalrate = "";*/
+    ImageView imageView;
 
     public ProductFragment() {
         // Required empty public constructor
@@ -93,6 +94,9 @@ public class ProductFragment extends Fragment {
 
         String catid = Constants.categoryid;
         String subcatid = Constants.subcategoryid;
+
+        imageView = view.findViewById(R.id.no_product);
+        imageView.setVisibility(View.GONE);
 
         new fetchProduct(getActivity(), catid, subcatid).execute();
 
@@ -217,7 +221,7 @@ public class ProductFragment extends Fragment {
         String catid, subcatid;
         ProgressDialog progress;
         HashMap<String,String> map;
-        String proid, proimg, proname, proprice, cart, prodesc, wish, rating;
+        String proid, proimg, proname, proprice, prodesc, rating;
 
         public fetchProduct(Context context, String catid, String subcatid) {
             this.context = context;
@@ -277,7 +281,7 @@ public class ProductFragment extends Fragment {
                 if (jonj.getString("status").equalsIgnoreCase(
                         "success")) {
 
-                    String data = jonj.getString("data");
+                    final String data = jonj.getString("data");
                     JSONArray array = new JSONArray(data);
                     for(int i=0;i<array.length();i++) {
                         JSONObject jcat = array.getJSONObject(i);
@@ -295,18 +299,21 @@ public class ProductFragment extends Fragment {
                         map.put("product_name", proname);
                         map.put("product_price", proprice);
                         map.put("product_desc", prodesc);
-                       /* map.put("wish_flag", wish);
-                        map.put("cart_flag", cart);*/
                         map.put("product_rating", rating);
 
                         productList.add(map);
                     }
                     productAdapter = new ProductAdapter(getActivity(),productList);
                     recyclerView.setAdapter(productAdapter);
+                    imageView.setVisibility(View.GONE);
 
+                } else if (jonj.getString("status").equalsIgnoreCase(
+                        "empty")){
 
-                } else
+                    imageView.setVisibility(View.VISIBLE);
                     Toast.makeText(context, jonj.getString("message"), Toast.LENGTH_SHORT).show();
+
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }

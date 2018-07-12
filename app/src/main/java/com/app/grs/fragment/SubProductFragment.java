@@ -40,6 +40,7 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import okhttp3.Call;
 import okhttp3.FormBody;
@@ -67,7 +68,8 @@ public class SubProductFragment extends Fragment{
     public String wish_flag, cart_flag;
     private ArrayList<HashMap<String,String>> reviewList=new ArrayList<HashMap<String, String>>();
     RecyclerView.LayoutManager mLayoutManager;
-    private static final SimpleDateFormat sdf = new SimpleDateFormat("dd-M-yyyy hh:mm:ss");
+    SimpleDateFormat sdf;
+    Date now;
 
     public SubProductFragment() {
         // Required empty public constructor
@@ -177,8 +179,9 @@ public class SubProductFragment extends Fragment{
 
     private void rateDialog() {
 
-        final Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-        sdf.format(timestamp);
+        now = new Date();
+        sdf = new SimpleDateFormat("MM-dd-yyyy hh:mm:ss");
+        final String timestamp = sdf.format(now);
 
         final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = this.getLayoutInflater();
@@ -193,6 +196,7 @@ public class SubProductFragment extends Fragment{
         final CustomEditText etreview = dialogView.findViewById(R.id.rate_et_review);
 
         alertDialog = dialogBuilder.create();
+        alertDialog.setCancelable(false);
 
         if (ratingBar != null && etreview != null){
 
@@ -423,10 +427,10 @@ public class SubProductFragment extends Fragment{
         Context context;
         String url = Constants.BASE_URL + Constants.RATING;
         String proid, cusid, rate, review;
-        Timestamp timestamp;
+        String timestamp;
         ProgressDialog progress;
 
-        public postRating(Context context, String proid, String cusid, String rate, String review, Timestamp timestamp) {
+        public postRating(Context context, String proid, String cusid, String rate, String review, String timestamp) {
             this.context = context;
             this.proid = proid;
             this.cusid = cusid;
@@ -457,7 +461,7 @@ public class SubProductFragment extends Fragment{
                     .add("product_id", proid)
                     .add("rate", rate)
                     .add("review", review)
-                    .add("timestamp", String.valueOf(timestamp))
+                    .add("timestamp", timestamp)
                     .build();
             Request request = new Request.Builder()
                     .url(url)
@@ -709,8 +713,10 @@ public class SubProductFragment extends Fragment{
                     }
                     if (GetSet.getSubproductrating().equalsIgnoreCase("0")){
                         btnrate.setEnabled(true);
+                        btnrate.setText("RATE NOW");
                     }else {
                         btnrate.setEnabled(false);
+                        btnrate.setText("RATED");
                     }
 
                 }else {

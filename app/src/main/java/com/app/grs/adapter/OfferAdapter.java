@@ -47,7 +47,7 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.MyViewHolder
 
         final HashMap<String,String> itemmap = offerList.get(position);
 
-        Glide.with(mContext).load(itemmap.get("product_image")).into(holder.offImage);
+        Glide.with(mContext).load(itemmap.get("product_image")).thumbnail(0.1f).into(holder.offImage);
 
         holder.offName.setText(itemmap.get("product_name"));
 

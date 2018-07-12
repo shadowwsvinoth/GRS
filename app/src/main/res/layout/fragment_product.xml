@@ -13,5 +13,12 @@
         android:dividerHeight="4px"
         android:layout_height="match_parent"
         android:id="@+id/rv_product"/>
+    <ImageView
+        android:visibility="gone"
+        android:scaleType="fitXY"
+        android:src="@drawable/noproducts"
+        android:id="@+id/no_product"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" />
 
 </FrameLayout>

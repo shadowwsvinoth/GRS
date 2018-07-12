@@ -24,233 +24,297 @@
                 android:orientation="vertical">
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="100dp"
+                    android:layout_height="180dp"
                     android:background="@color/colorPrimary"/>
             </LinearLayout>
             <LinearLayout
+                android:layout_centerHorizontal="true"
                 android:id="@+id/pic_layout"
-                android:layout_marginTop="35dp"
+                android:layout_marginTop="25dp"
                 android:orientation="vertical"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
-                <ImageView
+                <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/profilepic_iv"
                     android:layout_width="120dp"
                     android:layout_height="120dp"
-                    android:scaleType="centerInside"
-                    android:background="#30000000"
-                    android:layout_gravity="center_horizontal"
-                    android:src="@drawable/user"/>
+                    app:civ_border_width="2dp"
+                    app:civ_border_color="#FF000000"
+                    android:src="@drawable/grslogo"/>
             </LinearLayout>
             <LinearLayout
+                android:layout_toRightOf="@+id/pic_layout"
                 android:layout_marginTop="100dp"
                 android:orientation="vertical"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
             <ImageView
+                android:gravity="center_horizontal"
                 android:id="@+id/profile_edit_iv"
                 android:src="@drawable/ic_mode_edit_black_24dp"
-                android:layout_gravity="right"
-                android:layout_marginRight="10dp"
                 android:layout_width="25dp"
                 android:layout_height="25dp" />
             </LinearLayout>
             <LinearLayout
-                android:layout_marginTop="30dp"
+                android:orientation="horizontal"
+                android:weightSum="2"
+                android:layout_marginTop="50dp"
                 android:layout_below="@+id/pic_layout"
                 android:id="@+id/et_name_layout"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+                <ImageView
+                    android:src="@drawable/name"
+                    android:layout_weight="0"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_gravity="center"/>
                 <com.libizo.CustomEditText
+                    android:layout_weight="2"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_margin="5dp"
+                    android:layout_height="40dp"
+                    android:layout_margin="10dp"
                     android:hint="Name"
                     android:inputType="text"
                     android:id="@+id/prof_et_name"
                     app:libIZO_clearIconTint="#808080"
-                    app:libIZO_setBorderColor="#808080"
                     app:libIZO_setBorderView="true"
                     app:libIZO_setClearIconVisible="true"
                     app:libIZO_setCornerRadius="4dp"
                     app:libIZO_setStrokeWidth="2dp"/>
             </LinearLayout>
             <LinearLayout
-                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                android:weightSum="2"
+                android:layout_marginTop="5dp"
                 android:layout_below="@+id/et_name_layout"
                 android:id="@+id/et_mobile_layout"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+                <ImageView
+                    android:src="@drawable/mobile"
+                    android:layout_weight="0"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_gravity="center"/>
                 <com.libizo.CustomEditText
+                    android:layout_weight="2"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_margin="5dp"
+                    android:layout_height="40dp"
+                    android:layout_margin="10dp"
                     android:hint="Mobile "
                     android:inputType="phone"
                     android:maxLength="10"
                     android:id="@+id/prof_et_mobile"
                     app:libIZO_clearIconTint="#808080"
-                    app:libIZO_setBorderColor="#808080"
                     app:libIZO_setBorderView="true"
                     app:libIZO_setClearIconVisible="true"
                     app:libIZO_setCornerRadius="4dp"
                     app:libIZO_setStrokeWidth="2dp"/>
             </LinearLayout>
             <LinearLayout
-                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                android:weightSum="2"
+                android:layout_marginTop="5dp"
                 android:layout_below="@+id/et_mobile_layout"
                 android:id="@+id/et_email_layout"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+                <ImageView
+                    android:src="@drawable/email"
+                    android:layout_weight="0"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_gravity="center"/>
                 <com.libizo.CustomEditText
+                    android:layout_weight="2"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_margin="5dp"
+                    android:layout_height="40dp"
+                    android:layout_margin="10dp"
                     android:hint="Email"
                     android:inputType="textEmailAddress"
                     android:id="@+id/prof_et_email"
                     app:libIZO_clearIconTint="#808080"
-                    app:libIZO_setBorderColor="#808080"
                     app:libIZO_setBorderView="true"
                     app:libIZO_setClearIconVisible="true"
                     app:libIZO_setCornerRadius="4dp"
                     app:libIZO_setStrokeWidth="2dp"/>
             </LinearLayout>
             <LinearLayout
-                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                android:weightSum="2"
+                android:layout_marginTop="5dp"
                 android:layout_below="@+id/et_email_layout"
                 android:id="@+id/et_city_layout"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+                <ImageView
+                    android:src="@drawable/city"
+                    android:layout_weight="0"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_gravity="center"/>
                 <com.libizo.CustomEditText
+                    android:layout_weight="2"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_margin="5dp"
+                    android:layout_height="40dp"
+                    android:layout_margin="10dp"
                     android:hint="City"
                     android:inputType="text"
                     android:id="@+id/prof_et_city"
                     app:libIZO_clearIconTint="#808080"
-                    app:libIZO_setBorderColor="#808080"
                     app:libIZO_setBorderView="true"
                     app:libIZO_setClearIconVisible="true"
                     app:libIZO_setCornerRadius="4dp"
                     app:libIZO_setStrokeWidth="2dp"/>
             </LinearLayout>
             <LinearLayout
-                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                android:weightSum="2"
+                android:layout_marginTop="5dp"
                 android:layout_below="@+id/et_city_layout"
                 android:id="@+id/et_state_layout"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+                <ImageView
+                    android:src="@drawable/state"
+                    android:layout_weight="0"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_gravity="center"/>
                 <com.libizo.CustomEditText
+                    android:layout_weight="2"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_margin="5dp"
+                    android:layout_height="40dp"
+                    android:layout_margin="10dp"
                     android:hint="State"
                     android:inputType="text"
                     android:id="@+id/prof_et_state"
                     app:libIZO_clearIconTint="#808080"
-                    app:libIZO_setBorderColor="#808080"
                     app:libIZO_setBorderView="true"
                     app:libIZO_setClearIconVisible="true"
                     app:libIZO_setCornerRadius="4dp"
                     app:libIZO_setStrokeWidth="2dp"/>
             </LinearLayout>
             <LinearLayout
-                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                android:weightSum="2"
+                android:layout_marginTop="5dp"
                 android:layout_below="@+id/et_state_layout"
                 android:id="@+id/et_zip_layout"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+                <ImageView
+                    android:src="@drawable/pincode"
+                    android:layout_weight="0"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_gravity="center"/>
                 <com.libizo.CustomEditText
+                    android:layout_weight="2"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_margin="5dp"
+                    android:layout_height="40dp"
+                    android:layout_margin="10dp"
                     android:hint="Pincode"
                     android:inputType="phone"
                     android:maxLength="6"
                     android:id="@+id/prof_et_pincode"
                     app:libIZO_clearIconTint="#808080"
-                    app:libIZO_setBorderColor="#808080"
                     app:libIZO_setBorderView="true"
                     app:libIZO_setClearIconVisible="true"
                     app:libIZO_setCornerRadius="4dp"
                     app:libIZO_setStrokeWidth="2dp"/>
             </LinearLayout>
             <LinearLayout
-                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                android:weightSum="2"
+                android:layout_marginTop="5dp"
                 android:layout_below="@+id/et_zip_layout"
                 android:id="@+id/et_add1_layout"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+                <ImageView
+                    android:src="@drawable/address"
+                    android:layout_weight="0"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_gravity="center"/>
                 <com.libizo.CustomEditText
+                    android:layout_weight="2"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_margin="5dp"
+                    android:layout_height="40dp"
+                    android:layout_margin="10dp"
                     android:hint="Address 1"
                     android:inputType="textPostalAddress"
                     android:id="@+id/prof_et_add1"
                     app:libIZO_clearIconTint="#808080"
-                    app:libIZO_setBorderColor="#808080"
                     app:libIZO_setBorderView="true"
                     app:libIZO_setClearIconVisible="true"
                     app:libIZO_setCornerRadius="4dp"
                     app:libIZO_setStrokeWidth="2dp"/>
             </LinearLayout>
             <LinearLayout
+                android:orientation="horizontal"
+                android:weightSum="2"
                 android:layout_marginBottom="70dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="5dp"
                 android:layout_below="@+id/et_add1_layout"
                 android:id="@+id/et_add2_layout"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+                <ImageView
+                    android:layout_gravity="center"
+                    android:src="@drawable/address"
+                    android:layout_weight="0"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp" />
                 <com.libizo.CustomEditText
+                    android:layout_weight="2"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_margin="5dp"
+                    android:layout_height="40dp"
+                    android:layout_margin="10dp"
                     android:hint="Address 2"
                     android:inputType="textPostalAddress"
                     android:id="@+id/prof_et_add2"
                     app:libIZO_clearIconTint="#808080"
-                    app:libIZO_setBorderColor="#808080"
                     app:libIZO_setBorderView="true"
                     app:libIZO_setClearIconVisible="true"
                     app:libIZO_setCornerRadius="4dp"
                     app:libIZO_setStrokeWidth="2dp"/>
             </LinearLayout>
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_marginTop="10dp"
+                android:layout_alignParentBottom="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <Button
+                    android:layout_marginBottom="5dp"
+                    android:text="Save"
+                    android:textSize="16sp"
+                    android:textColor="#ffffff"
+                    android:background="@color/colorPrimary"
+                    android:id="@+id/prof_btn_save"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
         </RelativeLayout>
     </ScrollView>
-    <LinearLayout
-        android:layout_marginBottom="5dp"
-        android:orientation="vertical"
-        android:layout_marginTop="10dp"
-        android:layout_alignParentBottom="true"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <Button
-            android:text="Save"
-            android:textSize="16sp"
-            android:textColor="#ffffff"
-            android:background="@color/colorPrimary"
-            android:id="@+id/prof_btn_save"
-            android:layout_gravity="center_horizontal"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
 </RelativeLayout>

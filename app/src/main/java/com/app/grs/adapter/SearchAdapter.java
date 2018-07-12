@@ -1,6 +1,7 @@
 package com.app.grs.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 
 import com.app.grs.R;
 import com.app.grs.activity.HomeActivity;
+import com.app.grs.activity.SearchActivity;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
@@ -31,7 +33,6 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         this.searchList = searchList;
 
     }
-
 
     @NonNull
     @Override
@@ -51,12 +52,16 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         holder.name.setText(itemmap.get("product_name"));
         holder.rate.setText(itemmap.get("product_rating"));
 
-        Glide.with(context).load(itemmap.get("product_image")).into(holder.image);
+        Glide.with(context).load(itemmap.get("product_image")).thumbnail(0.1f).into(holder.image);
 
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
+                Intent intent = new Intent(context, SearchActivity.class);
+                intent.putExtra("proid", itemmap.get("product_id"));
+                intent.putExtra("proname", itemmap.get("product_name"));
+                context.startActivity(intent);
                 Toast.makeText(context, "You have selected\t" + itemmap.get("product_name"), Toast.LENGTH_SHORT).show();
             }
         });

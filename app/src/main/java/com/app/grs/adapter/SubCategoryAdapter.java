@@ -49,7 +49,7 @@ public class SubCategoryAdapter extends RecyclerView.Adapter<SubCategoryAdapter.
 
         holder.subcatName.setText(itemmap.get("subcategory_name"));
 
-        Glide.with(mContext).load(itemmap.get("image_url") + itemmap.get("image_name")).into(holder.subcatImage);
+        Glide.with(mContext).load(itemmap.get("image_url") + itemmap.get("image_name")).thumbnail(0.1f).into(holder.subcatImage);
 
 
         holder.cardView.setOnClickListener(new View.OnClickListener() {

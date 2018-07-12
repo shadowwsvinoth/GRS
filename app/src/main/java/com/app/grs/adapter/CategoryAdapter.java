@@ -50,7 +50,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.MyView
         final HashMap<String,String> itemmap = categoryList.get(position);
 
         holder.catName.setText(itemmap.get("category_name"));
-        Glide.with(mContext).load(itemmap.get("image_url") + itemmap.get("image_name")).into(holder.catImage);
+        Glide.with(mContext).load(itemmap.get("image_url") + itemmap.get("image_name")).thumbnail(0.1f).into(holder.catImage);
 
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override

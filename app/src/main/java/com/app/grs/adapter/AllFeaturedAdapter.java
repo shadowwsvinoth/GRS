@@ -50,7 +50,7 @@ public class AllFeaturedAdapter extends RecyclerView.Adapter<AllFeaturedAdapter.
         holder.productPrice.setText("₹.\t" + itemmap.get("product_price"));
         holder.ratingBar.setRating(rate);
 
-        Glide.with(mContext).load(itemmap.get("product_image")).into(holder.productImage);
+        Glide.with(mContext).load(itemmap.get("product_image")).thumbnail(0.1f).into(holder.productImage);
 
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -49,7 +49,7 @@ public class FeaturedAdapter extends RecyclerView.Adapter<FeaturedAdapter.MyView
 
         final HashMap<String,String> itemmap = featuredList.get(position);
 
-        Glide.with(mContext).load(itemmap.get("product_image")).into(holder.feaImage);
+        Glide.with(mContext).load(itemmap.get("product_image")).thumbnail(0.1f).into(holder.feaImage);
 
         holder.feaName.setText(itemmap.get("product_name"));
 
@@ -87,7 +87,6 @@ public class FeaturedAdapter extends RecyclerView.Adapter<FeaturedAdapter.MyView
         public ImageView feaImage;
         public TextView  feaName;
         public CardView cardView;
-        public RelativeLayout relativeLayout;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -95,7 +94,6 @@ public class FeaturedAdapter extends RecyclerView.Adapter<FeaturedAdapter.MyView
             feaImage = itemView.findViewById(R.id.featuredimage_iv);
             feaName = itemView.findViewById(R.id.featuredname_tv);
             cardView = itemView.findViewById(R.id.cv_featured);
-            relativeLayout = itemView.findViewById(R.id.featured_layout);
 
 
         }

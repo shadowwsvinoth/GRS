@@ -75,6 +75,10 @@ public class HomeFragment extends Fragment {
     private FeaturedAdapter featuredAdapter;
     TextView textItemCount, offer_all, featured_all;
     int numItemCount;
+    Timer timer;
+    final long DELAY_MS = 1000;//delay in milliseconds before task is to be executed
+    final long PERIOD_MS = 5000; // time in milliseconds between successive task executions.
+
 
     public HomeFragment() {
         // Required empty public constructor
@@ -84,6 +88,7 @@ public class HomeFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+
     }
 
     @Override
@@ -146,6 +151,34 @@ public class HomeFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        banner();
+    }
+
+    private void banner() {
+
+        final Handler handler = new Handler();
+        final Runnable Update = new Runnable() {
+            public void run() {
+                if (currentPage == numofPage+1) {
+                    currentPage = 0;
+                }
+                viewPager.setCurrentItem(currentPage++, true);
+
+            }
+        };
+        timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                handler.post(Update);
+            }
+        }, DELAY_MS, PERIOD_MS);
+    }
+
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -156,9 +189,6 @@ public class HomeFragment extends Fragment {
         View cart = MenuItemCompat.getActionView(menuItem1);
         textItemCount = cart.findViewById(R.id.cart_badge);
         setBadge();
-
-
-
 
     }
 
@@ -340,22 +370,6 @@ public class HomeFragment extends Fragment {
                     viewPager.setOffscreenPageLimit(4);
                     circleIndicator.setViewPager(viewPager);
 
-                    final Handler handler = new Handler();
-                    final Runnable Update = new Runnable() {
-                        public void run() {
-                            if (currentPage == numofPage) {
-                                currentPage = 0;
-                            }
-                            viewPager.setCurrentItem(currentPage++, true);
-                        }
-                    };
-                    Timer swipeTimer = new Timer();
-                    swipeTimer.schedule(new TimerTask() {
-                        @Override
-                        public void run() {
-                            handler.post(Update);
-                        }
-                    }, 1000, 5000);
 
                    /* Intent intent = new Intent(context, HomeActivity.class);
                     startActivity(intent);*/

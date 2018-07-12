@@ -26,6 +26,7 @@ import com.app.grs.R;
 import com.app.grs.adapter.ReviewAdapter;
 import com.app.grs.fragment.OfferDetailsFragment;
 import com.app.grs.helper.Constants;
+import com.app.grs.helper.GRS;
 import com.bumptech.glide.Glide;
 import com.libizo.CustomEditText;
 
@@ -111,8 +112,10 @@ public class SubOfferAllActivity extends AppCompatActivity {
 
         if (prorate.equalsIgnoreCase("0")){
             btnoffrate.setEnabled(true);
+            btnoffrate.setText("RATE NOW");
         }else {
             btnoffrate.setEnabled(false);
+            btnoffrate.setText("RATED");
         }
 
         new fetchReview(this, proid).execute();
@@ -169,6 +172,20 @@ public class SubOfferAllActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // For Internet checking
+        GRS.registerReceiver(SubOfferAllActivity.this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // For Internet disconnect checking
+        GRS.unregisterReceiver(SubOfferAllActivity.this);
     }
 
     private class getFlag extends AsyncTask<String, Integer, String>{
@@ -382,6 +399,7 @@ public class SubOfferAllActivity extends AppCompatActivity {
         final CustomEditText etreview = dialogView.findViewById(R.id.rate_et_review);
 
         alertDialog = dialogBuilder.create();
+        alertDialog.setCancelable(false);
 
         if (ratingBar != null){
 

@@ -2,6 +2,7 @@ package com.app.grs.adapter;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.app.grs.R;
+import com.app.grs.activity.SingleWishlistActivity;
 import com.app.grs.helper.Constants;
 import com.bumptech.glide.Glide;
 
@@ -56,15 +58,25 @@ public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.MyView
     }
 
     @Override
-    public void onBindViewHolder(@NonNull WishlistAdapter.MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull WishlistAdapter.MyViewHolder holder, final int position) {
 
         final HashMap<String,String> itemmap = wishlistList.get(position);
 
         holder.productName.setText(itemmap.get("product_name"));
         holder.productPrice.setText( "₹.\t" +itemmap.get("product_price"));
 
-        Glide.with(mContext).load(itemmap.get("product_image")).into(holder.productImage);
+        Glide.with(mContext).load(itemmap.get("product_image")).thumbnail(0.1f).into(holder.productImage);
 
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(mContext, SingleWishlistActivity.class);
+                intent.putExtra("proid", itemmap.get("product_id"));
+                intent.putExtra("proname", itemmap.get("product_name"));
+                mContext.startActivity(intent);
+            }
+        });
         holder.deleteLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -74,10 +86,11 @@ public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.MyView
                 String cusid = Constants.pref.getString("mobileno", "");
                 String proid = itemmap.get("product_id");
 
-                wishlistList.remove(itemmap);
+                wishlistList.remove(position);
+                notifyItemRemoved(position);
+                notifyDataSetChanged();
 
                 int flag = 0;
-                notifyDataSetChanged();
                 new deleteWishlist(mContext, cusid, proid, flag).execute();
 
             }

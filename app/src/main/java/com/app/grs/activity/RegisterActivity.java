@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.app.grs.R;
 import com.app.grs.helper.Constants;
+import com.app.grs.helper.GRS;
 import com.app.grs.helper.GetSet;
 import com.libizo.CustomEditText;
 import org.json.JSONException;
@@ -72,19 +73,23 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                String mobile = etmobile.getText().toString().trim();
                 String password = etpassword.getText().toString().trim();
                 String confirmpassword = etconfirmpassword.getText().toString().trim();
 
-                if(mobile.equals("")){
-                    Toast.makeText(RegisterActivity.this, getString(R.string.please_fill_all), Toast.LENGTH_SHORT).show();
-                }else if(password.equals("")){
-                    Toast.makeText(RegisterActivity.this, getString(R.string.please_fill_all), Toast.LENGTH_SHORT).show();
-                }else if(confirmpassword.equals("")){
-                    Toast.makeText(RegisterActivity.this, getString(R.string.please_fill_all), Toast.LENGTH_SHORT).show();
-                }else if(!confirmpassword.equals(password)){
+                boolean emptyfeilds = false;
+
+                if(etmobile.getText().toString().trim().length() == 0){
+                    emptyfeilds = true;
+                    etmobile.setError("Details required");
+                }if(etpassword.getText().toString().trim().length() == 0){
+                    emptyfeilds = true;
+                    etpassword.setError("Details required");
+                }if(etconfirmpassword.getText().toString().trim().length() == 0){
+                    emptyfeilds = true;
+                    etconfirmpassword.setError("Details required");
+                }if(!confirmpassword.equals(password)){
                     Toast.makeText(RegisterActivity.this, "Password dont Match!", Toast.LENGTH_SHORT).show();
-                }else {
+                }if (emptyfeilds == false){
 
                     scrollLayout.setVisibility(View.GONE);
                     otpLayout.setVisibility(View.VISIBLE);
@@ -127,6 +132,20 @@ public class RegisterActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // For Internet checking
+        GRS.registerReceiver(RegisterActivity.this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // For Internet disconnect checking
+        GRS.unregisterReceiver(RegisterActivity.this);
     }
 
     public class VerifyOTP extends AsyncTask<String, Integer, String> {

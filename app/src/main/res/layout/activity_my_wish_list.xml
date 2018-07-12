@@ -5,15 +5,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.MyWishListActivity">
-
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:clipToPadding="false"
         android:scrollbars="vertical"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp"
         android:background="#10000000"
         android:padding="1dp"
         android:dividerHeight="4px"
         android:layout_height="match_parent"
         android:id="@+id/rv_wishlist"/>
-
 </RelativeLayout>

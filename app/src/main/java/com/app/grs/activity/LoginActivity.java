@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.app.grs.R;
 import com.app.grs.helper.Constants;
+import com.app.grs.helper.GRS;
 import com.app.grs.helper.GetSet;
 import com.libizo.CustomEditText;
 
@@ -90,7 +91,17 @@ public class LoginActivity extends AppCompatActivity {
                 String mobile = etmobile.getText().toString().trim();
                 String password = etpassword.getText().toString().trim();
 
-                new Login_Async(LoginActivity.this,mobile, password).execute();
+                boolean emptyfeilds = false;
+
+                if (etmobile.getText().toString().trim().length() == 0){
+                    emptyfeilds = true;
+                    etmobile.setError("Details required");
+                }if (etpassword.getText().toString().trim().length() == 0){
+                    emptyfeilds = true;
+                    etpassword.setError("Details required");
+                }if (emptyfeilds == false) {
+                    new Login_Async(LoginActivity.this, mobile, password).execute();
+                }
 
             }
         });
@@ -241,6 +252,21 @@ public class LoginActivity extends AppCompatActivity {
         }
         return true;
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // For Internet checking
+        GRS.registerReceiver(LoginActivity.this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // For Internet disconnect checking
+        GRS.unregisterReceiver(LoginActivity.this);
+    }
+
     public class VerifyOTP extends AsyncTask<String, Integer, String> {
 
         private Context context;
